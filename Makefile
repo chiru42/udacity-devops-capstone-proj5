@@ -35,3 +35,20 @@ lint:
 	pylint --disable=R,C,E,W app.py
 
 all: install lint test
+
+#####create cluster using eksctl
+## eksctl create cluster --config-file=demo-cluster.yaml
+## eksctl delete cluster --region=ap-south-1 --name=$cluster-name
+
+#### handy commads for kubectl
+
+## kubectl get deployments
+## kubectl get nodes
+## kubectl get pods
+## kubectl get services Or kubectl get svc $servicename
+## kubectl describe pod $podname
+## To get the service external-ip
+# kubectl get service $service-name -o jsonpath="{.status.loadBalancer.ingress[0].hostname}"
+
+## kubectl apply -f deployment.yaml
+## kubectl delete deployment $deployment-name
