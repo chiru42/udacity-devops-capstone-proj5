@@ -52,3 +52,6 @@ all: install lint test
 
 ## kubectl apply -f deployment.yaml
 ## kubectl delete deployment $deployment-name
+
+## secretes encoding via terminal
+# echo -n 'password' | openssl base64
