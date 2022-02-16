@@ -34,6 +34,16 @@ lint:
 	# This should be run from inside a virtualenv
 	pylint --disable=R,C,E,W app.py
 
+dockerize: 
+	./run_docker.sh
+dockepush:
+	./upload_docker.sh
+setupcluster:
+	eksctl create cluster --config-file=/kubernetes/demo-cluster.yaml
+	# fetch cluster name and export to env variable "cluster-name"
+deletecluster:
+	eksctl delete cluster --region=ap-south-1 --name=$cluster-name
+
 all: install lint test
 
 #####create cluster using eksctl
