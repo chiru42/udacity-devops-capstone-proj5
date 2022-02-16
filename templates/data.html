@@ -1,6 +1,6 @@
 <h2> House price Prediction Result</h2>
-<!-- {% for key,value in form_data.items() %}
-<h3> {{key}}</h3>
-<p> {{value}}</p>
-{% endfor %} -->
-{% form_data %}
+
+{% for x in form_data %}
+<p> {{x['prediction']}}</p>
+
+{%endfor%}
