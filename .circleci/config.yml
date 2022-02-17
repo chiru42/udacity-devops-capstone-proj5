@@ -8,6 +8,13 @@ orbs:
   docker: circleci/docker@2.0.2
   
 jobs:
+  build-docker:
+    executor: docker/docker
+    steps:
+      - checkout
+      - docker/check
+      - docker/build:
+          image: flaskapi
   build:
     docker:
     # Use the same Docker base as the project
@@ -72,10 +79,4 @@ workflows:
       - test:
           requires:
             - build
-      - build-docker:
-          executor: docker/docker
-          steps:
-            - checkout
-            - docker/check
-            - docker/build:
-                image: flaskapi
+      - build-docker
