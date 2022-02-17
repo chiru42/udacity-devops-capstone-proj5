@@ -91,8 +91,8 @@ jobs:
             #mkdir -p bin
             #ls
             #curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /bin
-            chmod +x eksctl
-            echo "eksctl: $(eksctl version)"
+            chmod +x ./eksctl
+            echo "./eksctl: $(./eksctl version)"
             make setupcluster
             
   deploy-k8s:
