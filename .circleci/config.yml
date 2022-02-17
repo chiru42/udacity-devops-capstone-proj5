@@ -79,6 +79,20 @@ jobs:
             . venv/bin/activate
             make install
             make test
+  launch-eks-cluster:
+    docker: 
+      - image: aws/aws-cli
+    steps:
+      - checkout
+      - run:
+          name: Install eksctl and create eks cluster
+          command: |
+            curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C ./bin
+            chmod +x ./bin/eksctl
+            echo "./bin/eksctl: $(./bin/eksctl version)"
+            cd ./bin
+            make setupcluster
+            
 workflows:
   default:
     jobs:
@@ -89,4 +103,6 @@ workflows:
       - test:
           requires:
             - build
-      - build-docker
+      - build-docker:
+          required:
+            - test
