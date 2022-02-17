@@ -11,6 +11,7 @@ jobs:
   build-docker:
     executor: docker/docker
     steps:
+      - setup_remote_docker
       - checkout
       - docker/check
       - docker/build:
