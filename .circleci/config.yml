@@ -84,6 +84,7 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - run: yum -y install tar
       - run:
           name: Install eksctl and create eks cluster
           command: |
@@ -98,6 +99,7 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - run: yum -y install tar
       - run:
           name: Install kubectl
           command: |
@@ -125,4 +127,6 @@ workflows:
           requires:
             - test
       - create-eks-cluster
-      - deploy-k8s
+      - deploy-k8s:
+          requires:
+            - create-eks-cluster
