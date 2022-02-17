@@ -88,7 +88,7 @@ jobs:
       - run:
           name: Install eksctl and create eks cluster
           command: |
-            sudo mkdir ./bin
+            mkdir ./bin
             curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C ./bin
             chmod +x ./bin/eksctl
             echo "./bin/eksctl: $(./bin/eksctl version)"
