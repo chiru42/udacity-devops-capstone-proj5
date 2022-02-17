@@ -1,0 +1,134 @@
+# Python CircleCI 2.0 configuration file
+#
+# Check https://circleci.com/docs/2.0/language-python/ for more details
+#
+version: 2.1
+
+orbs:
+  docker: circleci/docker@2.0.2
+  
+jobs:
+  build-docker:
+    executor: docker/docker
+    steps:
+      - setup_remote_docker
+      - checkout
+      - docker/check
+      - docker/build:
+          image: $DOCKER_LOGIN/flaskapi
+          tag: ${CIRCLE_WORKFLOW_ID:0:7}
+      - docker/push:
+          digest-path: /tmp/digest.txt
+          image: $DOCKER_LOGIN/flaskapi
+          tag: ${CIRCLE_WORKFLOW_ID:0:7}
+          #registry: docker.io/$DOCKER_LOGIN
+      - run:
+          command: |
+            echo "Digest is: $(</tmp/digest.txt)"
+  build:
+    docker:
+    # Use the same Docker base as the project
+      - image: python:3.7.3-stretch   
+
+    working_directory: ~/udacity-devops-capstone-proj5
+
+    steps:
+      - checkout:
+          path: ~/udacity-devops-capstone-proj5
+      
+      - restore_cache:
+          keys:
+            - v1-dependencies-{{ checksum "requirements.txt" }}
+            # fallback to using the latest cache if no exact match is found
+            - v1-dependencies-
+      
+      - run:
+          name: install dependencies
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            make install
+            # Install hadolint
+            wget -O /bin/hadolint https://github.com/hadolint/hadolint/releases/download/v1.16.3/hadolint-Linux-x86_64 &&\
+            chmod +x /bin/hadolint
+            
+      - save_cache:
+          paths:
+            - ./venv
+          key: v1-dependencies-{{ checksum "requirements.txt" }}      
+            make lint
+      - run:
+          name: Run Lint
+          command: |
+            . venv/bin/activate
+            make lint
+  test:
+    docker:
+    # Use the same Docker base as the project
+      - image: python:3.7.3-stretch   
+
+    working_directory: ~/udacity-devops-capstone-proj5
+
+    steps:
+      - checkout:
+          path: ~/udacity-devops-capstone-proj5
+      - run:
+          name: Run pytest
+          command: |
+            python3 -m venv venv
+            . venv/bin/activate
+            make install
+            make test
+  create-eks-cluster:
+    docker: 
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run: yum -y install tar
+      - run:
+          name: Install eksctl and create eks cluster
+          command: |
+            mkdir -p bin
+            ls
+            curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /bin
+            #curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C .
+            chmod +x /bin/eksctl
+            echo "/bin/eksctl: $(/bin/eksctl version)"
+            make setupcluster
+            
+  deploy-k8s:
+    docker:
+      - image: amazon/aws-cli
+    steps:
+      - checkout
+      - run: yum -y install tar
+      - run:
+          name: Install kubectl
+          command: |
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            chmod +x kubectl
+            echo "kubectl: $(kubectl version --client)"
+      - run:
+          name: Deploy app to k8s
+          command: |
+            envsubst < ./kubernetes/aws-k8s-deployment.yaml | kubectl apply -f -
+            kubectl get deployments
+          
+          
+workflows:
+  default:
+    jobs:
+      - build:
+          filters:
+            branches:
+              only: [branch]
+      - test:
+          requires:
+            - build
+      - build-docker:
+          requires:
+            - test
+      - create-eks-cluster
+      - deploy-k8s:
+          requires:
+            - create-eks-cluster
