@@ -20,6 +20,7 @@ jobs:
       - docker/push:
           digest-path: /tmp/digest.txt
           image: $DOCKER_LOGIN/flaskapi
+          tag: ${CIRCLE_WORKFLOW_ID:0:7}
           #registry: docker.io/$DOCKER_LOGIN
       - run:
           command: |
