@@ -104,5 +104,5 @@ workflows:
           requires:
             - build
       - build-docker:
-          required:
+          requires:
             - test
