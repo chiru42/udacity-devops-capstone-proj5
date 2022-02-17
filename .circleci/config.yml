@@ -16,6 +16,12 @@ jobs:
       - docker/check
       - docker/build:
           image: flaskapi
+      - docker/push:
+          digest-path: /tmp/digest.txt
+          image: flaskapi
+      - run:
+          command: |
+            echo "Digest is: $(</tmp/digest.txt)"
   build:
     docker:
     # Use the same Docker base as the project
