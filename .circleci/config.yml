@@ -79,9 +79,9 @@ jobs:
             . venv/bin/activate
             make install
             make test
-  launch-eks-cluster:
+  create-eks-cluster:
     docker: 
-      - image: aws/aws-cli
+      - image: amazon/aws-cli
     steps:
       - checkout
       - run:
@@ -95,20 +95,20 @@ jobs:
             
   deploy-k8s:
     docker:
-      - image: aws/aws-cli
+      - image: amazon/aws-cli
     steps:
       - checkout
       - run:
           name: Install kubectl
           command: |
-          curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
-          sudo chmod +x ./kubectl
-          echo "./kubectl: $(./kubectl version --client)"
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            sudo chmod +x ./kubectl
+            echo "./kubectl: $(./kubectl version --client)"
       - run:
           name: Deploy app to k8s
           command: |
-          envsubst < ./kubernetes/aws-k8s-deployment.yaml | kubectl apply -f -
-          ./kubectl get deployments
+            envsubst < ./kubernetes/aws-k8s-deployment.yaml | kubectl apply -f -
+            ./kubectl get deployments
           
           
 workflows:
@@ -124,3 +124,5 @@ workflows:
       - build-docker:
           requires:
             - test
+      - create-eks-cluster
+      - deploy-k8s
