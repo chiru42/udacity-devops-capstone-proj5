@@ -3,6 +3,10 @@
 # Check https://circleci.com/docs/2.0/language-python/ for more details
 #
 version: 2.1
+
+orbs:
+  docker: circleci/docker@2.0.2
+  
 jobs:
   build:
     docker:
@@ -61,10 +65,17 @@ jobs:
 workflows:
   default:
     jobs:
-      - build
-          #filters:
-            #branches:
-              #only: [main]
+      - build:
+          filters:
+            branches:
+              only: [branch]
       - test:
           requires:
             - build
+      - build-docker:
+          executor: docker/docker
+          steps:
+            - checkout
+            - docker/check
+            - docker/build:
+                image: flaskapi
