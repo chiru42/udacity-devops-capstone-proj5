@@ -39,10 +39,10 @@ dockerize:
 dockepush:
 	./upload_docker.sh
 setupcluster:
-	eksctl create cluster --config-file=/kubernetes/cluster.yaml
+	./eksctl create cluster --config-file=/kubernetes/cluster.yaml
 	# fetch cluster name and export to env variable "cluster-name"
 deletecluster:
-	eksctl delete cluster --region=ap-south-1 --name=$cluster-name
+	./eksctl delete cluster --region=ap-south-1 --name=$cluster-name
 
 all: install lint test
 
