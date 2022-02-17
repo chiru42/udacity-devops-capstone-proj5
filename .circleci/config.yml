@@ -19,7 +19,7 @@ jobs:
       - docker/push:
           digest-path: /tmp/digest.txt
           image: $DOCKER_LOGIN/flaskapi
-          registry: docker.io/$DOCKER_LOGIN
+          #registry: docker.io/$DOCKER_LOGIN
       - run:
           command: |
             echo "Digest is: $(</tmp/digest.txt)"
