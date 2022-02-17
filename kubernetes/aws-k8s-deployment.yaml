@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: app
-          image: chiru42/flaskapi:${CIRCLECI_WORKFLOW_ID:0:7}
+          image: chiru42/flaskapi:latest
           imagePullPolicy: "Always"
           ports:
             - containerPort: 80
