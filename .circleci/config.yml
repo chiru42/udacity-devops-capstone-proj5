@@ -90,10 +90,10 @@ jobs:
           command: |
             mkdir -p bin
             ls
-            curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C ./bin
+            curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C /bin
             #curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C .
-            chmod +x ./bin/eksctl
-            echo "./bin/eksctl: $(./bin/eksctl version)"
+            chmod +x /bin/eksctl
+            echo "/bin/eksctl: $(/bin/eksctl version)"
             make setupcluster
             
   deploy-k8s:
