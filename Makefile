@@ -32,7 +32,7 @@ lint:
 	hadolint --ignore=DL3013 Dockerfile
 	# This is a linter for Python source code linter: https://www.pylint.org/
 	# This should be run from inside a virtualenv
-	pylint --disable=R,C,E,W app.py
+	pylint --disable=R,C,W app.py
 
 dockerize: 
 	./run_docker.sh
