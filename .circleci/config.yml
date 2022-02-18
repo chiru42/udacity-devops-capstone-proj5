@@ -162,7 +162,7 @@ jobs:
             else
               envsubst < ~/project/kubernetes/aws-k8s-deployment.yaml | kubectl apply -f -
               kubectl get service $service-name -o jsonpath="{.status.loadBalancer.ingress[0].hostname}"
-            
+            fi           
           
           
 workflows:
