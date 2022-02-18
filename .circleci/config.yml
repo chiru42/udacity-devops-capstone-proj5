@@ -174,10 +174,10 @@ workflows:
       - lint:
           filters:
             branches:
-              only: [branch]
+              only: [main]
       - test:
           requires:
-            - build
+            - lint
       - build-docker:
           requires:
             - test
