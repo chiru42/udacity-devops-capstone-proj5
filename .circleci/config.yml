@@ -130,7 +130,6 @@ workflows:
           requires:
             - test
       - create-eks-cluster
-      - deploy-k8s:
-          requires:
-            - create-eks-cluster:
-                only: [branch]
+      #- deploy-k8s:
+          #requires:
+            #- create-eks-cluster:
