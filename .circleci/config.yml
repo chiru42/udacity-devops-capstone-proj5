@@ -143,7 +143,7 @@ jobs:
           name: Deploy app to k8s
           command: |
             cd ./kube
-            envsubst < ./kubernetes/aws-k8s-deployment.yaml | kubectl apply -f -
+            envsubst < ~/project/kubernetes/aws-k8s-deployment.yaml | kubectl apply -f -
             kubectl get deployments
             
           
