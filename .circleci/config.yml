@@ -106,7 +106,7 @@ jobs:
             then
               echo "***EKS cluster already exists in aws"
               echo "writing kubeconfig to ./kube for the existing cluster"
-              eksctl utils write-kubeconfig --cluster $CLUSTER_NAME --region $AWS_DEFAULT_REGION --kubeconfig ./kube
+              eksctl utils write-kubeconfig --cluster $CLUSTER_NAME --region $AWS_DEFAULT_REGION --kubeconfig './kube'
               echo "printing kube/config"
               cat config
             else
