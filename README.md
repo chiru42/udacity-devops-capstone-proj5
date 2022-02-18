@@ -22,15 +22,24 @@ The project includes the following main tasks:
 - Initialize the Python virtual environment: make setup
 - Install all necessary dependencies: make install
 - Test the app.py code and Dockerfile using pylint & hadolint: make lint
+![Lint error screenshot.](lint_error.png)
+![Lint error pipeline screenshot.](lint_error_pipeline.png)
 - Create a Dockerfile to "containerize" the flask app: ./run_docker.sh
 - Deploy to a public Docker Registry: ./upload_docker.sh
+![Successful upload to docker hub from circleci job.](docker_hub_repo.png)
 - Deploy a Kubernetes cluster in aws eks using eksctl
-- Deploy the flask application to aws eks
+- Deploy the flask application to aws eks using kubectl
 - Update the app in the cluster, using a rolling-update strategy
+![Successful rolling deployment into k8s from circleci job.](RollingDeployment_jobSuccess.png)
 
 The loadbalancer endpoint after successfull deployment into k8s cluster, we can access the application webpage from browser.
 Endpoint sample-
 "http://loadbalancer_ip:80/form"
+
+The screenshots below show the successful CI/CD pipeline implementation status and also the active webpage of app running in k8s cluster.
+![Successful CI/CD pipeline status.](CIpipeline_success.png)
+
+![Active webpage running on k8s cluster.](success_webpage.png)
 
 ### CI/CD Tools and Cloud Services
 - Circle CI - Cloud-based CI/CD service
