@@ -109,7 +109,7 @@ jobs:
               echo "writing kubeconfig to ./kube for the existing cluster"
               eksctl utils write-kubeconfig --cluster $CLUSTER_NAME --region $AWS_DEFAULT_REGION --kubeconfig './kube/config'
               echo "printing kube/config"
-              cat ./configconfig
+              cat ./kube/config
             else
               eksctl create cluster --config-file=./kubernetes/cluster.yaml
               ls
