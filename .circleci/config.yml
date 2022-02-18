@@ -175,7 +175,7 @@ workflows:
       - lint:
           filters:
             branches:
-              only: [branch]
+              only: [main]
       - test:
           requires:
             - lint
