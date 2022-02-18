@@ -123,10 +123,11 @@ jobs:
       - run:
           name: Deploy app to k8s eks cluster
           command: |
+            export KUBECONFIG=~/project/kube/config
             echo $KUBECONFIG
             echo "***Getting kubectl config"
             kubectl config view --kubeconfig './kube/config'
-            #kubectl cluster-info dump
+            kubectl cluster-info dump
             #kubectl get deployments
             #cat config
             #envsubst < ~/project/kubernetes/aws-k8s-deployment.yaml | kubectl apply -f -
