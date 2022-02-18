@@ -125,11 +125,11 @@ jobs:
           command: |
             export KUBECONFIG=~/project/kube/config
             echo $KUBECONFIG
+            ls
             echo "***Getting kubectl config"
             kubectl config view --kubeconfig './kube/config'
-            kubectl cluster-info dump
-            #kubectl get deployments
-            #cat config
+            #kubectl cluster-info dump
+            kubectl get deployments
             #envsubst < ~/project/kubernetes/aws-k8s-deployment.yaml | kubectl apply -f -
       - persist_to_workspace:
           root: ~/
