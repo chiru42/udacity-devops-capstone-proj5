@@ -156,6 +156,7 @@ jobs:
             then
               echo "Deployment already exists. Upgrading existing deployment"
               #kubectl set image deployments/$DEPLOYMENT_NAME $DEPLOYMENT_NAME=$DOCKER_LOGIN/flaskapi:${CIRCLE_WORKFLOW_ID:0:7}
+              kubectl get services
               kubectl get service $K8_SERVICE_NAME -o jsonpath="{.status.loadBalancer.ingress[0].hostname}"
               kubectl describe service $K8_SERVICE_NAME
               #kubectl get service $K8_SERVICE_NAME -o jsonpath="{.status.loadBalancer.ingress[0].hostname}"
