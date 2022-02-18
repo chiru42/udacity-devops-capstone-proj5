@@ -22,7 +22,8 @@ The project includes the following main tasks:
 - Initialize the Python virtual environment: make setup
 - Install all necessary dependencies: make install
 - Test the app.py code and Dockerfile using pylint & hadolint: make lint
-![Lint error screenshot.](lint_error.png)
+|![Lint error screenshot.](lint_error.png)|
+
 ![Lint error pipeline screenshot.](lint_error_pipeline.png)
 - Create a Dockerfile to "containerize" the flask app: ./run_docker.sh
 - Deploy to a public Docker Registry: ./upload_docker.sh
@@ -38,6 +39,8 @@ Endpoint sample-
 
 The screenshots below show the successful CI/CD pipeline implementation status and also the active webpage of app running in k8s cluster.
 ![Successful CI/CD pipeline status.](CIpipeline_success.png)
+
+|![Active EC2 instance status image.](aws-ec2-instance.png)|
 
 ![Active webpage running on k8s cluster.](success_webpage.png)
 
