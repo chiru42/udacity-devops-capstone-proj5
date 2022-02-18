@@ -110,6 +110,7 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - run: yum -y install tar gzip
       - attach_workspace:
           at: ~/
       # install envsubst
