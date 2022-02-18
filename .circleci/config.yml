@@ -84,7 +84,7 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - run: yum -y install tar
+      - run: yum -y install tar gzip
       - run:
           name: Install kubectl for eksctl
           command: |
@@ -115,7 +115,7 @@ jobs:
       - persist_to_workspace:
           root: ~/
           paths:
-            - project/kube/config
+            - project/kube
             
   deploy-k8s:
     docker:
