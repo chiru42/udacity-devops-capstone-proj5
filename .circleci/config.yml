@@ -125,9 +125,10 @@ jobs:
       - run:
           name: Deploy app to k8s
           command: |
-            cd ./kube/config
-            envsubst < ./kubernetes/aws-k8s-deployment.yaml | kubectl apply -f -
+            #cd ./kube/config
             kubectl get deployments
+            envsubst < ./kubernetes/aws-k8s-deployment.yaml | kubectl apply -f -
+            
           
           
 workflows:
