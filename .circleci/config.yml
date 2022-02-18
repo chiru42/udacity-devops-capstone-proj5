@@ -109,14 +109,13 @@ jobs:
               echo "writing kubeconfig to ./kube for the existing cluster"
               eksctl utils write-kubeconfig --cluster $CLUSTER_NAME --region $AWS_DEFAULT_REGION --kubeconfig './kube/config'
               echo "printing kube/config"
-              cat config
+              cat ./configconfig
             else
               eksctl create cluster --config-file=./kubernetes/cluster.yaml
               ls
               cp /root/.kube/config ./kube
-              cd ./kube
               echo "printing kube/config"
-              cat config
+              cat ./kube/config
             fi
       - persist_to_workspace:
           root: ~/
@@ -143,7 +142,7 @@ jobs:
       - run:
           name: Deploy app to k8s
           command: |
-            cd ./kube/config
+            cd ./kube
             envsubst < ./kubernetes/aws-k8s-deployment.yaml | kubectl apply -f -
             kubectl get deployments
             
