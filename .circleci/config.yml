@@ -124,7 +124,9 @@ jobs:
           name: Deploy app to k8s eks cluster
           command: |
             cd ./kube
-            kubectl cluster-info dump
+            ls
+            kubectl config view
+            #kubectl cluster-info dump
             #kubectl get deployments
             #cat config
             #envsubst < ~/project/kubernetes/aws-k8s-deployment.yaml | kubectl apply -f -
