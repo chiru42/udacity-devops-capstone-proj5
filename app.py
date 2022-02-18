@@ -17,6 +17,7 @@ def scale(payload):
     LOG.info(f"Scaling Payload: \n{payload}")
     scaler = StandardScaler().fit(payload.astype(float))
     scaled_adhoc_predict = scaler.transform(payload.astype(float))
+    if
     return scaled_adhoc_predict
  
 @app.route('/form')
