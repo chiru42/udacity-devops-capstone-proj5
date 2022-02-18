@@ -96,23 +96,37 @@ jobs:
             echo "cd ~/"
             cd ~/
             ls
+            mkdir -p ./kube
+            echo "created kube dir"
+            ls
+            cp /root/.kube/config ./kube
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project/kube/config
             
   deploy-k8s:
     docker:
       - image: amazon/aws-cli
     steps:
       - checkout
+      - attach_workspace:
+          at: ~/
+      # install envsubst
+      - run: yum install -y gettext
       - run:
           name: Install kubectl
           command: |
             curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
             chmod +x ./kubectl
-            echo "./kubectl: $(./kubectl version --client)"
+            mv ./kubectl /usr/bin/
+            echo "kubectl: $(kubectl version --client)"
       - run:
           name: Deploy app to k8s
           command: |
-            envsubst < ./kubernetes/aws-k8s-deployment.yaml | ./kubectl apply -f -
-            ./kubectl get deployments
+            cd ./kube/config
+            envsubst < ./kubernetes/aws-k8s-deployment.yaml | kubectl apply -f -
+            kubectl get deployments
           
           
 workflows:
@@ -128,7 +142,9 @@ workflows:
       - build-docker:
           requires:
             - test
-      - create-eks-cluster
-      #- deploy-k8s:
+      - create-eks-cluster:
+          requires:
+            - build-docker
+      - deploy-k8s
           #requires:
             #- create-eks-cluster:
