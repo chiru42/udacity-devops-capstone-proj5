@@ -150,8 +150,14 @@ jobs:
             echo "***Getting kubectl config"
             #kubectl config view --kubeconfig './kube/config'
             #kubectl cluster-info dump
-            kubectl get deployments
-            envsubst < ~/project/kubernetes/aws-k8s-deployment.yaml | kubectl apply -f -
+            if kubectl get deployments | grep flaskapi-deployment
+            then
+              echo "Deployment already exists. Upgrading existing deployment"
+              kubectl 
+              kubectl get service $service-name -o jsonpath="{.status.loadBalancer.ingress[0].hostname}"
+            else
+              envsubst < ~/project/kubernetes/aws-k8s-deployment.yaml | kubectl apply -f -
+              kubectl get service $service-name -o jsonpath="{.status.loadBalancer.ingress[0].hostname}"
             
           
           
@@ -168,9 +174,9 @@ workflows:
       - build-docker:
           requires:
             - test
-      - create-eks-cluster
-          #requires:
-            #- build-docker
+      - create-eks-cluster:
+          requires:
+            - build-docker
       - deploy-k8s:
           requires:
             - create-eks-cluster
