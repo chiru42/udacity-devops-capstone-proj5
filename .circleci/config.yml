@@ -99,7 +99,7 @@ jobs:
             chmod +x ./eksctl
             mv ./eksctl /usr/bin/
             echo "eksctl: $(eksctl version)"
-            CLUSTER_NAME = 'my-cluster'
+            export CLUSTER_NAME='my-cluster'
             mkdir -p ./kube
             echo "created kube dir"
             if eksctl get cluster --region=ap-south-1 | grep $CLUSTER_NAME
@@ -164,6 +164,6 @@ workflows:
       - create-eks-cluster
           #requires:
             #- build-docker
-      #- deploy-k8s:
-          #requires:
-            #- create-eks-cluster
+      - deploy-k8s:
+          requires:
+            - create-eks-cluster
