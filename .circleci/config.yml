@@ -156,8 +156,9 @@ jobs:
             #kubectl cluster-info dump
             if kubectl get deployments | grep $DEPLOYMENT_NAME
             then
-              echo "Deployment already exists. Upgrading existing deployment"
-              kubectl set image deployments/$DEPLOYMENT_NAME $DEPLOYMENT_NAME=$DOCKER_LOGIN/flaskapi:${CIRCLE_WORKFLOW_ID:0:7}
+              echo "***Deployment already exists. Making a rolling deployment to app"
+              kubectl set image deployments/$DEPLOYMENT_NAME app=$DOCKER_LOGIN/flaskapi:${CIRCLE_WORKFLOW_ID:0:7}
+              kubectl rollout status deployment/$DEPLOYMENT_NAME
             else
               envsubst < ~/project/kubernetes/aws-k8s-deployment.yaml | kubectl apply -f -
             fi
