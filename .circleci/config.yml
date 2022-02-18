@@ -99,13 +99,18 @@ jobs:
             chmod +x ./eksctl
             mv ./eksctl /usr/bin/
             echo "eksctl: $(eksctl version)"
-            if eksctl get cluster --region=ap-south-1 | grep 'my-cluster'
+            CLUSTER_NAME = 'my-cluster'
+            mkdir -p ./kube
+            echo "created kube dir"
+            if eksctl get cluster --region=ap-south-1 | grep $CLUSTER_NAME
             then
               echo "***EKS cluster already exists in aws"
+              echo "writing kubeconfig to ./kube for the existing cluster"
+              eksctl utils write-kubeconfig --cluster $CLUSTER_NAME --region $AWS_DEFAULT_REGION --kubeconfig ./kube
+              echo "printing kube/config"
+              cat config
             else
               eksctl create cluster --config-file=./kubernetes/cluster.yaml
-              mkdir -p ./kube
-              echo "created kube dir"
               ls
               cp /root/.kube/config ./kube
               cd ./kube
