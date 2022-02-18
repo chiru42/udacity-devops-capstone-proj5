@@ -122,9 +122,9 @@ jobs:
             fi
       - run:
           name: Deploy app to k8s eks cluster
-          commands: |
-            kubectl get deployments
+          command: |
             cd ./kube
+            kubectl get deployments
             #cat config
             #envsubst < ~/project/kubernetes/aws-k8s-deployment.yaml | kubectl apply -f -
       - persist_to_workspace:
