@@ -125,6 +125,8 @@ jobs:
           command: |
             cd ./kube
             ls
+            cat config
+            echo "***Getting kubectl config"
             kubectl config view
             #kubectl cluster-info dump
             #kubectl get deployments
