@@ -84,14 +84,14 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - run: yum -y install tar
+      #- run: yum -y install tar
       - run:
           name: Install eksctl and create eks cluster
           command: |
             #curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C ./
             chmod +x ./eksctl
             echo "./eksctl: $(./eksctl version)"
-            #./eksctl create cluster --config-file=./kubernetes/cluster.yaml
+            ./eksctl create cluster --config-file=./kubernetes/cluster.yaml
             ls
             echo "cd ~/"
             cd ~/
@@ -102,7 +102,6 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      - run: yum -y install tar
       - run:
           name: Install kubectl
           command: |
