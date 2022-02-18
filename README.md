@@ -33,20 +33,20 @@ Endpoint sample-
 "http://loadbalancer_ip:80/form"
 
 ### CI/CD Tools and Cloud Services
-Circle CI - Cloud-based CI/CD service
-Amazon AWS - Cloud services provider
-Docker Hub - Container images repository service
-AWS CLI - Command-line tool for AWS
-AWS EKS - Amazon Elastic Kubernetes Services
-AWS eksctl - The official CLI for Amazon EKS
-kubectl - a command-line tool to control Kubernetes clusters
+- Circle CI - Cloud-based CI/CD service
+- Amazon AWS - Cloud services provider
+- Docker Hub - Container images repository service
+- AWS CLI - Command-line tool for AWS
+- AWS EKS - Amazon Elastic Kubernetes Services
+- AWS eksctl - The official CLI for Amazon EKS
+- kubectl - a command-line tool to control Kubernetes clusters
 
 ### circleCI Environment Variables
 This project needs below mentioned variables defined as env variables in the circleCI project for accomplishing the jobs in pipeline.
 
-AWS_ACCESS_KEY_ID
-AWS_DEFAULT_REGION
-AWS_SECRET_ACCESS_KEY
-DOCKER_LOGIN
-DOCKER_PASSWORD
+- AWS_ACCESS_KEY_ID
+- AWS_DEFAULT_REGION
+- AWS_SECRET_ACCESS_KEY
+- DOCKER_LOGIN
+- DOCKER_PASSWORD
 
