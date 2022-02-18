@@ -23,7 +23,7 @@ The project includes the following main tasks:
 - Initialize the Python virtual environment: make setup
 - Install all necessary dependencies: make install
 - Test the app.py code and Dockerfile using pylint & hadolint: make lint
-Showing below the intentional lint error screenshots.
+-Showing below the intentional lint error screenshots.
 ![Lint error screenshot.](lint_error.png)
 
 ![Lint error pipeline screenshot.](lint_error_pipeline.png)
