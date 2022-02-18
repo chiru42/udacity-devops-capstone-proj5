@@ -8,24 +8,7 @@ orbs:
   docker: circleci/docker@2.0.2
   
 jobs:
-  build-docker:
-    executor: docker/docker
-    steps:
-      - setup_remote_docker
-      - checkout
-      - docker/check
-      - docker/build:
-          image: $DOCKER_LOGIN/flaskapi
-          tag: ${CIRCLE_WORKFLOW_ID:0:7}
-      - docker/push:
-          digest-path: /tmp/digest.txt
-          image: $DOCKER_LOGIN/flaskapi
-          tag: ${CIRCLE_WORKFLOW_ID:0:7}
-          #registry: docker.io/$DOCKER_LOGIN
-      - run:
-          command: |
-            echo "Digest is: $(</tmp/digest.txt)"
-  build:
+  lint:
     docker:
     # Use the same Docker base as the project
       - image: python:3.7.3-stretch   
@@ -79,6 +62,25 @@ jobs:
             . venv/bin/activate
             make install
             make test
+  
+  build-docker:
+    executor: docker/docker
+    steps:
+      - setup_remote_docker
+      - checkout
+      - docker/check
+      - docker/build:
+          image: $DOCKER_LOGIN/flaskapi
+          tag: ${CIRCLE_WORKFLOW_ID:0:7}
+      - docker/push:
+          digest-path: /tmp/digest.txt
+          image: $DOCKER_LOGIN/flaskapi
+          tag: ${CIRCLE_WORKFLOW_ID:0:7}
+          #registry: docker.io/$DOCKER_LOGIN
+      - run:
+          command: |
+            echo "Digest is: $(</tmp/digest.txt)"
+  
   create-eks-cluster:
     docker: 
       - image: amazon/aws-cli
@@ -155,20 +157,15 @@ jobs:
             if kubectl get deployments | grep $DEPLOYMENT_NAME
             then
               echo "Deployment already exists. Upgrading existing deployment"
-              #kubectl set image deployments/$DEPLOYMENT_NAME $DEPLOYMENT_NAME=$DOCKER_LOGIN/flaskapi:${CIRCLE_WORKFLOW_ID:0:7}
-              
+              kubectl set image deployments/$DEPLOYMENT_NAME $DEPLOYMENT_NAME=$DOCKER_LOGIN/flaskapi:${CIRCLE_WORKFLOW_ID:0:7}
             else
               envsubst < ~/project/kubernetes/aws-k8s-deployment.yaml | kubectl apply -f -
-              kubectl get service $service-name -o jsonpath="{.status.loadBalancer.ingress[0].hostname}"
             fi
             echo "***Printing all existing services"
             kubectl get services
-            export K8_LoadBalancer_ENDPOINT=$(kubectl get service $K8_SERVICE_NAME -o jsonpath="{.status.loadBalancer.ingress[0].hostname}")
+            #export K8_LoadBalancer_ENDPOINT=$(kubectl get service $K8_SERVICE_NAME -o jsonpath="{.status.loadBalancer.ingress[0].hostname}")
             #kubectl describe service $K8_SERVICE_NAME
-            kubectl get service $K8_SERVICE_NAME
-            export LOADBALANCER_PORT=$(kubectl get service $K8_SERVICE_NAME -o jsonpath="{.status.loadBalancer.ingress[0].targetport}")
-            echo "*********EKS Load Balance service endpoint"
-            echo $K8_LoadBalancer_ENDPOINT:$LOADBALANCER_PORT/form
+            #kubectl get service $K8_SERVICE_NAME
           
           
 workflows:
@@ -184,9 +181,9 @@ workflows:
       - build-docker:
           requires:
             - test
-      - create-eks-cluster
-          #requires:
-            #- build-docker
+      - create-eks-cluster:
+          requires:
+            - build-docker
       - deploy-k8s:
           requires:
             - create-eks-cluster
