@@ -125,9 +125,9 @@ jobs:
       - run:
           name: Deploy app to k8s
           command: |
-            #cd ./kube/config
-            kubectl get deployments
+            cd ./kube/config
             envsubst < ./kubernetes/aws-k8s-deployment.yaml | kubectl apply -f -
+            kubectl get deployments
             
           
           
@@ -147,6 +147,6 @@ workflows:
       - create-eks-cluster:
           requires:
             - build-docker
-      - deploy-k8s
-          #requires:
-            #- create-eks-cluster:
+      - deploy-k8s:
+          requires:
+            - create-eks-cluster
