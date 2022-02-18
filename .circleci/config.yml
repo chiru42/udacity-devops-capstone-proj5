@@ -147,7 +147,7 @@ jobs:
           command: |
             export KUBECONFIG=~/project/kube/config
             export DEPLOYMENT_NAME='flaskapi-deployment'
-            export K8_SERVICE_NAME='flaskapi-service'
+            export K8_SERVICE_NAME='flask-service'
             echo $KUBECONFIG
             echo "***Getting kubectl config"
             #kubectl config view --kubeconfig './kube/config'
