@@ -123,11 +123,8 @@ jobs:
       - run:
           name: Deploy app to k8s eks cluster
           command: |
-            cd ./kube
-            ls
-            cat config
             echo "***Getting kubectl config"
-            kubectl config view
+            kubectl config view --kubeconfig './kube/config'
             #kubectl cluster-info dump
             #kubectl get deployments
             #cat config
