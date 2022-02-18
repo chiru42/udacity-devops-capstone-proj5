@@ -125,7 +125,7 @@ jobs:
           command: |
             cd ./kube
             kubectl cluster-info dump
-            kubectl get deployments
+            #kubectl get deployments
             #cat config
             #envsubst < ~/project/kubernetes/aws-k8s-deployment.yaml | kubectl apply -f -
       - persist_to_workspace:
