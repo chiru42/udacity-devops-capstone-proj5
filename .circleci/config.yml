@@ -84,22 +84,34 @@ jobs:
       - image: amazon/aws-cli
     steps:
       - checkout
-      #- run: yum -y install tar
+      - run: yum -y install tar
+      - run:
+          name: Install kubectl for eksctl
+          command: |
+            curl -LO "https://dl.k8s.io/release/$(curl -L -s https://dl.k8s.io/release/stable.txt)/bin/linux/amd64/kubectl"
+            chmod +x ./kubectl
+            mv ./kubectl /usr/bin/
+            echo "kubectl: $(kubectl version --client)"
       - run:
           name: Install eksctl and create eks cluster
           command: |
             #curl --silent --location "https://github.com/weaveworks/eksctl/releases/latest/download/eksctl_$(uname -s)_amd64.tar.gz" | tar xz -C ./
             chmod +x ./eksctl
-            echo "./eksctl: $(./eksctl version)"
-            ./eksctl create cluster --config-file=./kubernetes/cluster.yaml
-            ls
-            echo "cd ~/"
-            cd ~/
-            ls
-            mkdir -p ./kube
-            echo "created kube dir"
-            ls
-            cp /root/.kube/config ./kube
+            mv ./eksctl /usr/bin/
+            echo "eksctl: $(eksctl version)"
+            if eksctl get cluster --region=ap-south-1 | grep 'my-cluster'
+            then
+              echo "***EKS cluster already exists in aws"
+            else
+              eksctl create cluster --config-file=./kubernetes/cluster.yaml
+              mkdir -p ./kube
+              echo "created kube dir"
+              ls
+              cp /root/.kube/config ./kube
+              cd ./kube
+              echo "printing kube/config"
+              cat config
+            fi
       - persist_to_workspace:
           root: ~/
           paths:
@@ -144,9 +156,9 @@ workflows:
       - build-docker:
           requires:
             - test
-      - create-eks-cluster:
-          requires:
-            - build-docker
-      - deploy-k8s:
-          requires:
-            - create-eks-cluster
+      - create-eks-cluster
+          #requires:
+            #- build-docker
+      #- deploy-k8s:
+          #requires:
+            #- create-eks-cluster
